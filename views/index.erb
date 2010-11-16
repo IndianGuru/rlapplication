@@ -1,25 +1,48 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 <title>Simple Facebook app via Sinatra</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="description" content="RubyLearning.org" />
 <meta name="keywords" content="rubylearning,ruby,ruby programming,ruby course" />
 </head>
+
 <body>
-<fb:login-button></fb:login-button>
-<h3>Welcome to my simple Facebook app via Sinatra.</h3>
 <div id="fb-root"></div>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<script>
-  FB.init({appId: '<%=APP_ID%>', status: true, cookie: true, xfbml: true});
-  FB.Event.subscribe('auth.sessionChange', function(response) {
-    if (response.session) {
-      <p>A user has logged in, and a new cookie has been saved</p>
-    } else {
-        <p>The user has logged out, and the cookie has been cleared</p>
+  <script type="text/javascript">
+    window.fbAsyncInit = function() {
+      FB.init({appId: '<%=APP_ID%>', status: true, cookie: true, xfbml: true});
+
+      FB.Event.subscribe('auth.sessionChange', function(response) {
+        if (response.session) {
+          // A user has logged in, and a new cookie has been saved
+          login();  
+        } else {
+            // The user has logged out, and the cookie has been cleared
+            logout();
+        }
+      });
+    };
+    (function() {
+      var e = document.createElement('script');
+      e.type = 'text/javascript';
+      e.src = document.location.protocol +
+        '//connect.facebook.net/en_US/all.js';
+      e.async = true;
+      document.getElementById('fb-root').appendChild(e);
+    }());
+
+    function login(){
+      FB.api('/me', function(response) {
+        alert('You have successfully logged in, '+response.name+"!");
+        //alert('Email: '+response.email);
+      });
     }
-  });
-</script>
+    function logout(){
+      alert('You have successfully logged out!');
+    }
+  </script>
+<h3>Welcome to my simple Facebook app via Sinatra.</h3>
+<fb:login-button autologoutlink='true' perms='email,user_birthday'></fb:login-button>
 </body>
 </html>
