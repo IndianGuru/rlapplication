@@ -1,0 +1,1 @@
+The source code for the sample FB app created using Sinatra, Javascript SDK.
